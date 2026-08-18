@@ -1,7 +1,7 @@
-package com.sportsbook.Model.Category;
+package com.sportsbook.model.Category;
 
-import com.sportsbook.Model.League.League;
-import com.sportsbook.Model.Sport.Sport;
+import com.sportsbook.model.League.League;
+import com.sportsbook.model.Sport.Sport;
 import jakarta.persistence.*;
 import lombok.*;
 import com.fasterxml.jackson.annotation.JsonManagedReference;

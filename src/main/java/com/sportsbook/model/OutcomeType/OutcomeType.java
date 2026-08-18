@@ -1,6 +1,6 @@
-package com.sportsbook.Model.OutcomeType;
+package com.sportsbook.model.OutcomeType;
 
-import com.sportsbook.Model.MarketType.MarketType;
+import com.sportsbook.model.MarketType.MarketType;
 import jakarta.persistence.*;
 import lombok.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;
