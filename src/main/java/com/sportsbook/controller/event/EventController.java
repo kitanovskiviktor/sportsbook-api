@@ -59,4 +59,11 @@ public class EventController {
         eventService.deleteEvent(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @PostMapping("/by-leagues")
+    public List<EventResponseDTO> getEventsByLeagues(
+            @RequestBody List<Long> leagueIds,
+            @RequestParam Integer hours) {
+        return eventService.getEventsByLeagues(leagueIds, hours);
+    }
 }

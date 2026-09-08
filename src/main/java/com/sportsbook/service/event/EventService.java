@@ -8,6 +8,7 @@ import com.sportsbook.repository.event.EventRepository;
 import com.sportsbook.repository.league.LeagueRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -89,6 +90,16 @@ public class EventService {
         event.setStatus(status);
         Event updated = eventRepository.save(event);
         return toResponseDTO(updated);
+    }
+
+    public List<EventResponseDTO> getEventsByLeagues(List<Long> leagueIds, Integer hours) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime end = now.plusHours(hours);
+        return eventRepository
+                .findByLeagueIdInAndStartTimeBetween(leagueIds, now, end)
+                .stream()
+                .map(this::toResponseDTO)
+                .collect(Collectors.toList());
     }
 
     public void deleteEvent(Long id) {
