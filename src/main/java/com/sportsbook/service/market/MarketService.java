@@ -2,14 +2,14 @@ package com.sportsbook.service.market;
 
 import com.sportsbook.dto.market.*;
 import com.sportsbook.dto.outcome.OutcomeResponseDTO;
-import com.sportsbook.model.Event.Event;
-import com.sportsbook.model.Market.Market;
-import com.sportsbook.model.MarketType.MarketType;
-import com.sportsbook.model.Outcome.Outcome;
-import com.sportsbook.model.OutcomeType.OutcomeType;
-import com.sportsbook.repository.event.EventRepository;
-import com.sportsbook.repository.market.MarketRepository;
-import com.sportsbook.repository.markettype.MarketTypeRepository;
+import com.sportsbook.model.shared.Event.Event;
+import com.sportsbook.model.shared.Market.Market;
+import com.sportsbook.model.shared.MarketType.MarketType;
+import com.sportsbook.model.shared.Outcome.Outcome;
+import com.sportsbook.model.shared.OutcomeType.OutcomeType;
+import com.sportsbook.repository.shared.event.EventRepository;
+import com.sportsbook.repository.shared.market.MarketRepository;
+import com.sportsbook.repository.shared.markettype.MarketTypeRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;

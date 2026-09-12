@@ -2,16 +2,16 @@ package com.sportsbook.service.ticket;
 
 import com.sportsbook.dto.ticket.*;
 import com.sportsbook.exception.OddsChangedException;
-import com.sportsbook.model.Event.Event;
-import com.sportsbook.model.Market.Market;
-import com.sportsbook.model.Outcome.Outcome;
-import com.sportsbook.model.Player.Player;
-import com.sportsbook.model.TicketSelection.TicketSelection;
-import com.sportsbook.model.Tiket.Ticket;
-import com.sportsbook.model.Tiket.TicketStatus;
-import com.sportsbook.repository.outcome.OutcomeRepository;
-import com.sportsbook.repository.player.PlayerRepository;
-import com.sportsbook.repository.ticket.TicketRepository;
+import com.sportsbook.model.shared.Event.Event;
+import com.sportsbook.model.shared.Market.Market;
+import com.sportsbook.model.shared.Outcome.Outcome;
+import com.sportsbook.model.tenant.Player.Player;
+import com.sportsbook.model.tenant.TicketSelection.TicketSelection;
+import com.sportsbook.model.tenant.Ticket.Ticket;
+import com.sportsbook.model.tenant.Ticket.TicketStatus;
+import com.sportsbook.repository.shared.outcome.OutcomeRepository;
+import com.sportsbook.repository.tenant.player.PlayerRepository;
+import com.sportsbook.repository.tenant.ticket.TicketRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

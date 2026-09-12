@@ -2,10 +2,10 @@ package com.sportsbook.service.event;
 
 import com.sportsbook.dto.event.EventRequestDTO;
 import com.sportsbook.dto.event.EventResponseDTO;
-import com.sportsbook.model.Event.Event;
-import com.sportsbook.model.League.League;
-import com.sportsbook.repository.event.EventRepository;
-import com.sportsbook.repository.league.LeagueRepository;
+import com.sportsbook.model.shared.Event.Event;
+import com.sportsbook.model.shared.League.League;
+import com.sportsbook.repository.shared.event.EventRepository;
+import com.sportsbook.repository.shared.league.LeagueRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

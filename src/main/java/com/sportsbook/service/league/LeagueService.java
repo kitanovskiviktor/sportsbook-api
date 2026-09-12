@@ -2,12 +2,12 @@ package com.sportsbook.service.league;
 
 import com.sportsbook.dto.league.LeagueRequestDTO;
 import com.sportsbook.dto.league.LeagueResponseDTO;
-import com.sportsbook.model.Category.Category;
-import com.sportsbook.model.League.League;
-import com.sportsbook.model.Sport.Sport;
-import com.sportsbook.repository.category.CategoryRepository;
-import com.sportsbook.repository.league.LeagueRepository;
-import com.sportsbook.repository.sport.SportRepository;
+import com.sportsbook.model.shared.Category.Category;
+import com.sportsbook.model.shared.League.League;
+import com.sportsbook.model.shared.Sport.Sport;
+import com.sportsbook.repository.shared.category.CategoryRepository;
+import com.sportsbook.repository.shared.league.LeagueRepository;
+import com.sportsbook.repository.shared.sport.SportRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

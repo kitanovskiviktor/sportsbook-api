@@ -3,11 +3,11 @@ package com.sportsbook.service.markettype;
 import com.sportsbook.dto.markettype.MarketTypeRequestDTO;
 import com.sportsbook.dto.markettype.MarketTypeResponseDTO;
 import com.sportsbook.dto.outcometype.OutcomeTypeResponseDTO;
-import com.sportsbook.model.MarketType.MarketType;
-import com.sportsbook.model.OutcomeType.OutcomeType;
-import com.sportsbook.model.Sport.Sport;
-import com.sportsbook.repository.markettype.MarketTypeRepository;
-import com.sportsbook.repository.sport.SportRepository;
+import com.sportsbook.model.shared.MarketType.MarketType;
+import com.sportsbook.model.shared.OutcomeType.OutcomeType;
+import com.sportsbook.model.shared.Sport.Sport;
+import com.sportsbook.repository.shared.markettype.MarketTypeRepository;
+import com.sportsbook.repository.shared.sport.SportRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

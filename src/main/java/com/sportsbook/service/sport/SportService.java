@@ -2,8 +2,8 @@ package com.sportsbook.service.sport;
 
 import com.sportsbook.dto.sport.SportRequestDTO;
 import com.sportsbook.dto.sport.SportResponseDTO;
-import com.sportsbook.model.Sport.Sport;
-import com.sportsbook.repository.sport.SportRepository;
+import com.sportsbook.model.shared.Sport.Sport;
+import com.sportsbook.repository.shared.sport.SportRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,7 +14,7 @@ public class SportService {
 
     private final SportRepository sportRepository;
 
-    public SportService(com.sportsbook.repository.sport.SportRepository sportRepository) {
+    public SportService(SportRepository sportRepository) {
         this.sportRepository = sportRepository;
     }
 

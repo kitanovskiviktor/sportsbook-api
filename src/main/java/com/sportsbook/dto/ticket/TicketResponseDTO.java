@@ -1,6 +1,6 @@
 package com.sportsbook.dto.ticket;
 
-import com.sportsbook.model.Tiket.TicketStatus;
+import com.sportsbook.model.tenant.Ticket.TicketStatus;
 import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

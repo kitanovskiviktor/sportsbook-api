@@ -1,8 +1,8 @@
 package com.sportsbook.service.player;
 
 import com.sportsbook.dto.auth.*;
-import com.sportsbook.model.Player.Player;
-import com.sportsbook.repository.player.PlayerRepository;
+import com.sportsbook.model.tenant.Player.Player;
+import com.sportsbook.repository.tenant.player.PlayerRepository;
 import com.sportsbook.security.JwtUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

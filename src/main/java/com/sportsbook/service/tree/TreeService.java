@@ -1,11 +1,11 @@
 package com.sportsbook.service.tree;
 
 import com.sportsbook.dto.tree.*;
-import com.sportsbook.model.Category.Category;
-import com.sportsbook.model.Event.Event;
-import com.sportsbook.model.League.League;
-import com.sportsbook.model.Sport.Sport;
-import com.sportsbook.repository.event.EventRepository;
+import com.sportsbook.model.shared.Category.Category;
+import com.sportsbook.model.shared.Event.Event;
+import com.sportsbook.model.shared.League.League;
+import com.sportsbook.model.shared.Sport.Sport;
+import com.sportsbook.repository.shared.event.EventRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
