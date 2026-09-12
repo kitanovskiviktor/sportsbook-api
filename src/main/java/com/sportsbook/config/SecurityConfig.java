@@ -33,6 +33,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/sports/**", "/api/categories/**",
                                 "/api/leagues/**", "/api/events/**",
                                 "/api/markets/**", "/api/market-types/**").permitAll()
+                        .requestMatchers("/api/tenant/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

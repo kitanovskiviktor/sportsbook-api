@@ -1,5 +1,6 @@
 package com.sportsbook.config.tenant;
 
+import com.sportsbook.repository.shared.tenant.TenantRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,6 +15,12 @@ import java.io.IOException;
 @Component
 @Order(1)
 public class TenantFilter extends OncePerRequestFilter {
+
+    private final TenantRepository tenantRepository;
+
+    public TenantFilter(TenantRepository tenantRepository) {
+        this.tenantRepository = tenantRepository;
+    }
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
@@ -36,9 +43,8 @@ public class TenantFilter extends OncePerRequestFilter {
         }
 
         String host = request.getServerName();
-        if (host.contains("branda")) return "brand_a";
-        if (host.contains("brandb")) return "brand_b";
-
-        return "brand_a";
+        return tenantRepository.findByDomain(host)
+                .map(t -> t.getTenantKey())
+                .orElse("brand_a");
     }
 }
