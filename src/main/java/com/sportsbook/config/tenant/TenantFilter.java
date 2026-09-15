@@ -1,6 +1,8 @@
 package com.sportsbook.config.tenant;
 
+import com.sportsbook.model.shared.Tenant.Tenant;
 import com.sportsbook.repository.shared.tenant.TenantRepository;
+import com.sportsbook.security.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,9 +19,11 @@ import java.io.IOException;
 public class TenantFilter extends OncePerRequestFilter {
 
     private final TenantRepository tenantRepository;
+    private final JwtUtil jwtUtil;
 
-    public TenantFilter(TenantRepository tenantRepository) {
+    public TenantFilter(TenantRepository tenantRepository, JwtUtil jwtUtil) {
         this.tenantRepository = tenantRepository;
+        this.jwtUtil = jwtUtil;
     }
 
     @Override
@@ -29,7 +33,9 @@ public class TenantFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         try {
             String tenant = resolveTenant(request);
-            TenantContext.setTenant(tenant);
+            if (tenant != null) {
+                TenantContext.setTenant(tenant);
+            }
             filterChain.doFilter(request, response);
         } finally {
             TenantContext.clear();
@@ -37,14 +43,26 @@ public class TenantFilter extends OncePerRequestFilter {
     }
 
     private String resolveTenant(HttpServletRequest request) {
-        String headerTenant = request.getHeader("X-Tenant-ID");
-        if (headerTenant != null && !headerTenant.isBlank()) {
-            return headerTenant;
+        String header = request.getHeader("X-Tenant-ID");
+        if (header != null && !header.isBlank()) {
+            return header;
+        }
+
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            try {
+                String token = authHeader.substring(7);
+                String tenantKey = jwtUtil.extractTenantKey(token);
+                if (tenantKey != null && !tenantKey.isBlank()) {
+                    return tenantKey;
+                }
+            } catch (Exception e) {
+            }
         }
 
         String host = request.getServerName();
         return tenantRepository.findByDomain(host)
-                .map(t -> t.getTenantKey())
-                .orElse("brand_a");
+                .map(Tenant::getTenantKey)
+                .orElse(null);
     }
 }

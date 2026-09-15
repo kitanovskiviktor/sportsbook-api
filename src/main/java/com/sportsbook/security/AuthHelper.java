@@ -33,4 +33,10 @@ public class AuthHelper {
             throw new RuntimeException("Access denied: SUPER_ADMIN required");
         }
     }
+
+    public void requireOperator(HttpServletRequest request) {
+        if (!"OPERATOR".equals(getRole(request))) {
+            throw new RuntimeException("Access denied: OPERATOR required");
+        }
+    }
 }
