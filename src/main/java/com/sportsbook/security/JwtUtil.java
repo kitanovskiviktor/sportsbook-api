@@ -57,4 +57,23 @@ public class JwtUtil {
                 .parseSignedClaims(token)
                 .getPayload();
     }
+
+    public String generateAdminToken(String username, Long userId, String role, String tenantKey) {
+        return Jwts.builder()
+                .subject(username)
+                .claim("userId", userId)
+                .claim("role", role)
+                .claim("tenantKey", tenantKey)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(getKey())
+                .compact();
+    }
+
+    public String extractRole(String token) {
+        return parse(token).get("role", String.class);
+    }
+    public String extractTenantKey(String token) {
+        return parse(token).get("tenantKey", String.class);
+    }
 }
