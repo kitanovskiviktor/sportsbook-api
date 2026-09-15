@@ -7,9 +7,11 @@ import com.sportsbook.model.shared.Market.Market;
 import com.sportsbook.model.shared.MarketType.MarketType;
 import com.sportsbook.model.shared.Outcome.Outcome;
 import com.sportsbook.model.shared.OutcomeType.OutcomeType;
+import com.sportsbook.model.tenant.OddsTenant.OddsTenant;
 import com.sportsbook.repository.shared.event.EventRepository;
 import com.sportsbook.repository.shared.market.MarketRepository;
 import com.sportsbook.repository.shared.markettype.MarketTypeRepository;
+import com.sportsbook.repository.tenant.oddsTenant.OddsTenantRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -23,13 +25,15 @@ public class MarketService {
     private final MarketRepository marketRepository;
     private final EventRepository eventRepository;
     private final MarketTypeRepository marketTypeRepository;
+    private final OddsTenantRepository oddsTenantRepository;
 
     public MarketService(MarketRepository marketRepository,
                          EventRepository eventRepository,
-                         MarketTypeRepository marketTypeRepository) {
+                         MarketTypeRepository marketTypeRepository, OddsTenantRepository oddsTenantRepository) {
         this.marketRepository = marketRepository;
         this.eventRepository = eventRepository;
         this.marketTypeRepository = marketTypeRepository;
+        this.oddsTenantRepository = oddsTenantRepository;
     }
 
     public MarketResponseDTO addMarketToEvent(MarketRequestDTO request) {
@@ -81,12 +85,18 @@ public class MarketService {
     }
 
     private MarketResponseDTO toResponseDTO(Market market) {
+        List<Long> outcomeIds = market.getOutcomes().stream()
+                .map(Outcome::getId)
+                .collect(Collectors.toList());
+
+        Map<Long, BigDecimal> oddsOverrides = getOddsOverrides(outcomeIds);
+
         List<OutcomeResponseDTO> outcomeDTOs = market.getOutcomes().stream()
                 .map(o -> new OutcomeResponseDTO(
                         o.getId(),
                         o.getOutcomeType() != null ? o.getOutcomeType().getId() : null,
                         o.getOutcomeType() != null ? o.getOutcomeType().getName() : null,
-                        o.getOdds()
+                        oddsOverrides.getOrDefault(o.getId(), o.getOdds())
                 ))
                 .collect(Collectors.toList());
 
@@ -97,5 +107,14 @@ public class MarketService {
                 market.getMarketType() != null ? market.getMarketType().getName() : null,
                 outcomeDTOs
         );
+    }
+
+    private Map<Long, BigDecimal> getOddsOverrides(List<Long> outcomeIds) {
+        return oddsTenantRepository.findByOutcomeIdIn(outcomeIds)
+                .stream()
+                .collect(Collectors.toMap(
+                        OddsTenant::getOutcomeId,
+                        OddsTenant::getOverriddenOdds
+                ));
     }
 }

@@ -5,11 +5,13 @@ import com.sportsbook.exception.OddsChangedException;
 import com.sportsbook.model.shared.Event.Event;
 import com.sportsbook.model.shared.Market.Market;
 import com.sportsbook.model.shared.Outcome.Outcome;
+import com.sportsbook.model.tenant.OddsTenant.OddsTenant;
 import com.sportsbook.model.tenant.Player.Player;
 import com.sportsbook.model.tenant.TicketSelection.TicketSelection;
 import com.sportsbook.model.tenant.Ticket.Ticket;
 import com.sportsbook.model.tenant.Ticket.TicketStatus;
 import com.sportsbook.repository.shared.outcome.OutcomeRepository;
+import com.sportsbook.repository.tenant.oddsTenant.OddsTenantRepository;
 import com.sportsbook.repository.tenant.player.PlayerRepository;
 import com.sportsbook.repository.tenant.ticket.TicketRepository;
 import org.springframework.stereotype.Service;
@@ -26,13 +28,16 @@ public class TicketService {
     private final TicketRepository ticketRepository;
     private final PlayerRepository playerRepository;
     private final OutcomeRepository outcomeRepository;
+    private final OddsTenantRepository oddsTenantRepository;
 
     public TicketService(TicketRepository ticketRepository,
                          PlayerRepository playerRepository,
-                         OutcomeRepository outcomeRepository) {
+                         OutcomeRepository outcomeRepository,
+                         OddsTenantRepository oddsTenantRepository) {
         this.ticketRepository = ticketRepository;
         this.playerRepository = playerRepository;
         this.outcomeRepository = outcomeRepository;
+        this.oddsTenantRepository = oddsTenantRepository;
     }
 
     @Transactional
@@ -60,10 +65,12 @@ public class TicketService {
             Outcome outcome = outcomeRepository.findById(sel.getOutcomeId())
                     .orElseThrow(() -> new RuntimeException("Outcome not found: " + sel.getOutcomeId()));
 
-            if (outcome.getOdds().compareTo(sel.getOdds()) != 0) {
+            BigDecimal effectiveOdds = getEffectiveOdds(outcome);
+
+            if (effectiveOdds.compareTo(sel.getOdds()) != 0) {
                 throw new OddsChangedException(
                         "Odds changed for outcome " + sel.getOutcomeId() +
-                                ". Expected " + sel.getOdds() + " but current is " + outcome.getOdds());
+                                ". Expected " + sel.getOdds() + " but current is " + effectiveOdds);
             }
 
             Market market = outcome.getMarket();
@@ -78,10 +85,10 @@ public class TicketService {
             ts.setMarketName(market.getMarketType().getName());
             ts.setOutcomeName(outcome.getOutcomeType().getName());
             ts.setEventStatus(event.getStatus());
-            ts.setOddsAtPlacement(outcome.getOdds());
+            ts.setOddsAtPlacement(effectiveOdds);
 
             ticket.getSelections().add(ts);
-            totalOdds = totalOdds.multiply(outcome.getOdds());
+            totalOdds = totalOdds.multiply(effectiveOdds);
         }
 
         ticket.setTotalOdds(totalOdds);
@@ -117,5 +124,11 @@ public class TicketService {
                 ticket.getId(), ticket.getStake(), ticket.getTotalOdds(),
                 ticket.getPotentialPayout(), ticket.getStatus(),
                 ticket.getPlacedAt(), selections);
+    }
+
+    private BigDecimal getEffectiveOdds(Outcome outcome) {
+        return oddsTenantRepository.findByOutcomeId(outcome.getId())
+                .map(OddsTenant::getOverriddenOdds)
+                .orElse(outcome.getOdds());
     }
 }
